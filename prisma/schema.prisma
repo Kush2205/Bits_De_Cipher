@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Questions {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  questionId     Int    @unique
+  imageUrl       String
+  points         Int
+  originalpoints Int
+  answer         String
+  hint1          Hint
+  hint2          Hint
+  dec_factor     Float  @default(0.05)
+}
+
+model User {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String
+  email                String   @unique
+  points               Int      @default(0)
+  questionsAnswered    Int      @default(0)
+  questionAnsweredTime Json     @default("[]") // Ensures this field is never null.
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+type Hint {
+  used Boolean
+  hint String
+}
+
+type AnswerRecord {
+  questionId Int
+  time       DateTime
+}
+

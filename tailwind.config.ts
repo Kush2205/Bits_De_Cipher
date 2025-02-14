@@ -1,3 +1,4 @@
+import { Pixelify_Sans, Poppins, Roboto } from "next/font/google";
 import type { Config } from "tailwindcss";
 
 export default {
@@ -12,6 +13,11 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        Roboto: ["Roboto", "sans-serif"],
+        Poppins: ["Poppins", "sans-serif"],
+        Pixelify_Sans: ["Pixelify_Sans", "sans-serif"],
+      }
     },
   },
   plugins: [],
