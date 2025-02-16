@@ -1,10 +1,10 @@
 
-const WS_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL || "ws://localhost:8080";
+const WS_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
 
 let socket: WebSocket | null = null;
 
 export function getWebSocket(): WebSocket | null {
-  
+   
   if (typeof window === "undefined") {
     console.error("WebSocket is not available on the server.");
     return null;
