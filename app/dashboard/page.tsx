@@ -4,9 +4,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import QuestionLayout from "../../components/QuestionLayout";
 import LeaderBoard from "../../components/LeaderBoard";
+
+
+interface leaderboard {
+  rank: number;
+  name: string;
+  points: number;
+}
+
+
+
 export default function Page() {
   const [questionDetails, setQuestionDetails] = useState<any>(null);
-  const [leaderboard, setLeaderboard] = useState<any>(null);
+  const [leaderboard, setLeaderboard] = useState<leaderboard[] | null>(null);
 
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
