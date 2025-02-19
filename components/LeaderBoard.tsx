@@ -25,9 +25,12 @@ function LeaderBoard({ leaderboard }: LeaderBoardProps) {
         style={{ fontFamily: pixelify.style.fontFamily }}
         className="relative mt-5 flex justify-around pb-2 after:content-[''] after:absolute after:bottom-0 after:left-4 after:right-4 after:h-[1px] after:bg-white"
       >
-        <h1 className="text-white text-2xl text-center">{rank}</h1>
-        <h1 className="text-white text-2xl text-center">{formattedName}</h1>
-        <h1 className="text-white text-2xl text-center">{points}</h1>
+        <div className='w-[33.33%]'> <h1 className="text-white text-2xl text-center">{rank}</h1></div>
+        <div className='w-[33.33%]'><h1 className="text-white text-2xl text-center">{formattedName}</h1></div>
+        <div className='w-[33.33%]'> <h1 className="text-white text-2xl text-center">{points}</h1></div>
+       
+        
+       
       </div>
     );
   };
