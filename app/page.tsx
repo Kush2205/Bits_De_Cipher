@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from "react";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { getWebSocket } from "../lib/WebSocket";
 import axios from "axios";
 import { Pixelify_Sans } from "next/font/google";
 import { Poppins } from "next/font/google";

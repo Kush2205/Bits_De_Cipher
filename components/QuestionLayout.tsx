@@ -1,7 +1,7 @@
 //// filepath: /d:/Projects/TypeScript Projects/Bits_De_Cipher/components/QuestionLayout.tsx
 import React, { useState } from 'react';
 import { Pixelify_Sans } from 'next/font/google';
-
+import Image from 'next/image';
 const pixelifySans = Pixelify_Sans({ subsets: ['latin'] });
 
 interface QuestionProps {
@@ -52,7 +52,7 @@ const QuestionLayout: React.FC<QuestionProps> = ({
       </div>
 
       <div>
-        <img
+        <Image
           src={imageUrl}
           alt={`Question ${questionId}`}
           className="w-[1000px] h-[500px] mb-4 object-contain"

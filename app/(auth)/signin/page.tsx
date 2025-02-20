@@ -5,44 +5,42 @@ import { Pixelify_Sans } from "next/font/google";
 import { TbBrandOnlyfans } from "react-icons/tb";
 import { FiLogIn } from "react-icons/fi";
 import { signIn } from "next-auth/react";
-import { PrismaClient } from "@prisma/client";
-import axios from "axios";
 
-const prisma = new PrismaClient();
 const pixelify = Pixelify_Sans({ subsets: ["latin"] });
-export default function Signin() {
 
+export default function Signin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
- 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const result = await signIn("credentials", {
+    await signIn("credentials", {
       username,
       password,
       redirect: true,
       callbackUrl: "/"
     });
-   
   };
-  
+
   const handleGoogleSignin = async () => {
-    const result = await signIn("google", {
+    await signIn("google", {
       redirect: false,
-      callbackUrl: "/",
-      
+      callbackUrl: "/"
     });
-  
-};
+  };
 
   return (
     <>
-      <div className="w-[100%] h-screen bg-neutral-800 flex items-center  justify-center ">
-        <div className="w-[450px] h-[470px] bg-neutral-700 rounded-xl ">
+      <div className="w-[100%] h-screen bg-neutral-800 flex items-center justify-center">
+        <div className="w-[450px] h-[470px] bg-neutral-700 rounded-xl">
           <div>
-            <h1 style={{ fontFamily: `${pixelify.style.fontFamily}` }} className="text-5xl text-white font-Pixelify_Sans text-center mt-5">Sign In</h1>
+            <h1
+              style={{ fontFamily: `${pixelify.style.fontFamily}` }}
+              className="text-5xl text-white font-Pixelify_Sans text-center mt-5"
+            >
+              Sign In
+            </h1>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="w-full flex flex-col items-center p-8 rounded-lg">
@@ -70,31 +68,47 @@ export default function Signin() {
             </div>
           </form>
 
-
-          <div className="flex w-full justify-between items-center gap-x-4 p-3 ">
-            <div onClick={handleGoogleSignin} className="w-[80%] hover:bg-[#2c2c2c] transition-all hover:cursor-pointer border border-white flex justify-center items-center rounded-lg  py-2">
-              <FcGoogle className="w-[50px] h-[30px] " />
-              <h1 style={{ fontFamily: `${pixelify.style.fontFamily}` }} className="text-white text-sm px-1">Sign In with Google</h1>
+          <div className="flex w-full justify-between items-center gap-x-4 p-3">
+            <div
+              onClick={handleGoogleSignin}
+              className="w-[80%] hover:bg-[#2c2c2c] transition-all hover:cursor-pointer border border-white flex justify-center items-center rounded-lg py-2"
+            >
+              <FcGoogle className="w-[50px] h-[30px]" />
+              <h1
+                style={{ fontFamily: `${pixelify.style.fontFamily}` }}
+                className="text-white text-sm px-1"
+              >
+                Sign In with Google
+              </h1>
             </div>
 
-            <div className="w-[80%] hover:hover:bg-[#2c2c2c]  transition-all hover:cursor-pointer border border-white flex justify-center items-center rounded-lg  py-2">
+            <div className="w-[80%] hover:hover:bg-[#2c2c2c] transition-all hover:cursor-pointer border border-white flex justify-center items-center rounded-lg py-2">
               <TbBrandOnlyfans className="w-[50px] h-[30px] text-blue-400" />
-              <h1 style={{ fontFamily: `${pixelify.style.fontFamily}` }} className="text-white text-sm px-1">Sign In with OnlyFans</h1>
+              <h1
+                style={{ fontFamily: `${pixelify.style.fontFamily}` }}
+                className="text-white text-sm px-1"
+              >
+                Sign In with OnlyFans
+              </h1>
             </div>
-
-
           </div>
 
           <div className="flex justify-center gap-x-1 mt-5">
-            <h1 style={{ fontFamily: `${pixelify.style.fontFamily}` }} className="text-white font-Roboto">Don't have an account ?</h1>
-            <h1 style={{ fontFamily: `${pixelify.style.fontFamily}` }} className="text-blue-300  font-semibold hover:cursor-pointer hover:underline">Sign up</h1>
+            <h1
+              style={{ fontFamily: `${pixelify.style.fontFamily}` }}
+              className="text-white font-Roboto"
+            >
+              Don&apos;t have an account ?
+            </h1>
+            <h1
+              style={{ fontFamily: `${pixelify.style.fontFamily}` }}
+              className="text-blue-300 font-semibold hover:cursor-pointer hover:underline"
+            >
+              Sign up
+            </h1>
           </div>
-
         </div>
       </div>
     </>
   );
-
-
-
 }

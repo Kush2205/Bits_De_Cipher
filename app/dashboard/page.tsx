@@ -1,22 +1,28 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import QuestionLayout from "../../components/QuestionLayout";
 import LeaderBoard from "../../components/LeaderBoard";
 import Popup from "../../components/Popup";
 
-interface leaderboard {
+interface Leaderboard {
   rank: number;
   name: string;
   points: number;
 }
 
-export default function Page() {
-  const [questionDetails, setQuestionDetails] = useState<any>(null);
-  const [leaderboard, setLeaderboard] = useState<leaderboard[] | null>(null);
+interface QuestionDetails {
+  imageUrl: string;
+  questionId: number;
+  points: number;
+}
+
+function DashboardContent() {
+  const [questionDetails, setQuestionDetails] = useState<QuestionDetails | null>(null);
+  const [leaderboard, setLeaderboard] = useState<Leaderboard[] | null>(null);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupContent, setPopupContent] = useState<string>("");
-  const [hint, setHint] = useState<string>("");
+
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
@@ -65,8 +71,7 @@ export default function Page() {
           localStorage.setItem("hint2", "false");
           setShowPopup(true);
           setPopupContent("Correct Answer");
-        }
-        else if (data.answerStatus === "incorrect") {
+        } else if (data.answerStatus === "incorrect") {
           setShowPopup(true);
           setPopupContent("Wrong Answer");
         }
@@ -78,20 +83,19 @@ export default function Page() {
         if (data.hint1) {
           setShowPopup(true);
           setPopupContent(data.hint1);
-          if(data.points){
-            setQuestionDetails(prevDetails => ({
+          if (data.points) {
+            setQuestionDetails(prevDetails => prevDetails && ({
               ...prevDetails,
               points: data.points
             }));
           }
-         
           localStorage.setItem("hint1", data.hint1);
         }
         if (data.hint2) {
           setShowPopup(true);
           setPopupContent(data.hint2);
-          if(data.points){
-            setQuestionDetails(prevDetails => ({
+          if (data.points) {
+            setQuestionDetails(prevDetails => prevDetails && ({
               ...prevDetails,
               points: data.points
             }));
@@ -103,7 +107,7 @@ export default function Page() {
           if (data.updatedQuestion) {
             setQuestionDetails(data.updatedQuestion);
           }
-        }, 1500)
+        }, 1500);
 
       } catch (error) {
         console.error("Error parsing message:", error, event.data);
@@ -160,9 +164,11 @@ export default function Page() {
           imageUrl={questionDetails.imageUrl}
           questionId={questionDetails.questionId}
           points={questionDetails.points}
-          onClick={(answer: string) => handleAnswerSubmit(answer, questionDetails.questionId)}
-          onHint1={() => getHint1()}
-          onHint2={() => getHint2()}
+          onClick={(answer: string) =>
+            handleAnswerSubmit(answer, questionDetails.questionId.toString())
+          }
+          onHint1={getHint1}
+          onHint2={getHint2}
         />
       )}
 
@@ -174,5 +180,13 @@ export default function Page() {
         <Popup content={popupContent} closePopup={() => setShowPopup(false)} />
       )}
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
