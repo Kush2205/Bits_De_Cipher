@@ -52,7 +52,7 @@ const QuestionLayout: React.FC<QuestionProps> = ({
       </div>
 
       <div>
-        <Image
+        <img
           src={imageUrl}
           alt={`Question ${questionId}`}
           className="w-[1000px] h-[500px] mb-4 object-contain"
