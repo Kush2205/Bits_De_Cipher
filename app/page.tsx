@@ -1,4 +1,4 @@
-//// filepath: /d:/Projects/TypeScript Projects/Bits_De_Cipher/app/page.tsx
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Pixelify_Sans } from "next/font/google";
 import { Poppins } from "next/font/google";
+import Poster from "../images/bdcb.png"
+import Rules from "../components/Rules";
 const pixelify = Pixelify_Sans({ subsets: ["latin"] });
 const PoppinsFont = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -44,8 +46,8 @@ function PageContent() {
 
   if (status === "loading" || userExists === null) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+      <div  className="flex items-center justify-center min-h-screen bg-neutral-800">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500" />
       </div>
     );
   }
@@ -75,10 +77,12 @@ function PageContent() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="mb-4">Rules Page</h1>
-      <p>Please read and accept the following rules to proceed.</p>
-      <button onClick={handleRejoin}>Start</button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-neutral">
+       <Rules/>
+     <div className="w-full bg-neutral-800 flex flex-col items-center justify-center p-5">
+     <button className="px-8 py-4 mt-5 text-2xl text-white bg-blue-600 rounded hover:bg-blue-700" onClick={handleRejoin}>Start</button>
+     </div>
+      
     </div>
   );
 }

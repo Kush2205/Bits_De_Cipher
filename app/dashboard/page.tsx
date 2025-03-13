@@ -158,7 +158,7 @@ function DashboardContent() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-[100vh] bg-neutral-800">
       {questionDetails && (
         <QuestionLayout
           imageUrl={questionDetails.imageUrl}

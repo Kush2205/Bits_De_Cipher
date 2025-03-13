@@ -5,7 +5,7 @@ import { Pixelify_Sans } from "next/font/google";
 import { TbBrandOnlyfans } from "react-icons/tb";
 import { FiLogIn } from "react-icons/fi";
 import { signIn } from "next-auth/react";
-
+import Image from "../../../images/Poster.jpg"
 const pixelify = Pixelify_Sans({ subsets: ["latin"] });
 
 export default function Signin() {
@@ -31,8 +31,8 @@ export default function Signin() {
   };
 
   return (
-    <>
-      <div className="w-[100%] h-screen bg-neutral-800 flex items-center justify-center">
+    <div className="flex">
+      <div className="w-[50%] h-screen bg-neutral-800 flex items-center justify-center">
         <div className="w-[450px] h-[470px] bg-neutral-700 rounded-xl">
           <div>
             <h1
@@ -71,7 +71,7 @@ export default function Signin() {
           <div className="flex w-full justify-between items-center gap-x-4 p-3">
             <div
               onClick={handleGoogleSignin}
-              className="w-[80%] hover:bg-[#2c2c2c] transition-all hover:cursor-pointer border border-white flex justify-center items-center rounded-lg py-2"
+              className="w-[100%] hover:bg-[#2c2c2c] transition-all hover:cursor-pointer border border-white flex justify-center items-center rounded-lg py-2"
             >
               <FcGoogle className="w-[50px] h-[30px]" />
               <h1
@@ -82,7 +82,7 @@ export default function Signin() {
               </h1>
             </div>
 
-            <div className="w-[80%] hover:hover:bg-[#2c2c2c] transition-all hover:cursor-pointer border border-white flex justify-center items-center rounded-lg py-2">
+            {/* <div className="w-[80%] hover:hover:bg-[#2c2c2c] transition-all hover:cursor-pointer border border-white flex justify-center items-center rounded-lg py-2">
               <TbBrandOnlyfans className="w-[50px] h-[30px] text-blue-400" />
               <h1
                 style={{ fontFamily: `${pixelify.style.fontFamily}` }}
@@ -90,7 +90,7 @@ export default function Signin() {
               >
                 Sign In with OnlyFans
               </h1>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex justify-center gap-x-1 mt-5">
@@ -109,6 +109,15 @@ export default function Signin() {
           </div>
         </div>
       </div>
-    </>
+      <div  style={{
+        backgroundImage: `url(${Image.src})`,
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover", 
+      }} className="w-[50%] h-screen">
+
+
+      </div>
+    </div>
   );
 }

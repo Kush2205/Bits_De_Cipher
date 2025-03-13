@@ -1,4 +1,4 @@
-//// filepath: /d:/Projects/TypeScript Projects/Bits_De_Cipher/app/api/db/users/route.ts
+
 
 import { prisma } from "../../../../lib/prisma";
 import { NextResponse, NextRequest } from "next/server";
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON payload" }, { status: 400 });
   }
 
-  // Ensure payload is a valid object and contains required fields.
+ 
   if (!payload || typeof payload !== "object") {
     return NextResponse.json({ error: "Payload must be an object" }, { status: 400 });
   }
