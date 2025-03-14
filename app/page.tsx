@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Pixelify_Sans } from "next/font/google";
 import { Poppins } from "next/font/google";
-import Poster from "../images/bdcb.png"
+
 import Rules from "../components/Rules";
 const pixelify = Pixelify_Sans({ subsets: ["latin"] });
 const PoppinsFont = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
@@ -34,8 +34,10 @@ function PageContent() {
 
           if (res.data.message === "User already exists") {
             setUserExists(true);
+            localStorage.setItem("status", "authenticated");
           } else {
             setUserExists(false);
+            localStorage.setItem("status", "authenticated");
           }
         } catch (error) {
           console.error("Error checking user existence:", error);

@@ -27,7 +27,10 @@ function NavBarContent() {
             </button>
             <button
               className="px-3 py-1 bg-red-500 rounded hover:bg-red-600"
-              onClick={() => signOut({callbackUrl : "/signin"})}
+            onClick={() => {
+              signOut({ callbackUrl: "/signin" });
+              localStorage.setItem("status", "unauthenticated");
+            }}
             >
               Sign Out
             </button>

@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import QuestionLayout from "../../components/QuestionLayout";
 import LeaderBoard from "../../components/LeaderBoard";
 import Popup from "../../components/Popup";
-
+import { SessionProvider, useSession } from "next-auth/react";
 interface Leaderboard {
   rank: number;
   name: string;
@@ -22,7 +22,8 @@ function DashboardContent() {
   const [leaderboard, setLeaderboard] = useState<Leaderboard[] | null>(null);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupContent, setPopupContent] = useState<string>("");
-
+  
+  
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
@@ -45,6 +46,10 @@ function DashboardContent() {
     if (!email) {
       console.error("No email provided in query parameters.");
       return;
+    }
+
+    if(localStorage.getItem("status") === "unauthenticated") {
+      window.location.href = "/signin";
     }
     const socket = new WebSocket(WS_URL);
     socketRef.current = socket;
