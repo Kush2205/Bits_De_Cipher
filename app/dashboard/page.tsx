@@ -1,10 +1,9 @@
 "use client";
-import React, { useState, useEffect, useRef, Suspense, use } from "react";
-import { useSearchParams } from "next/navigation";
+import React, { useState, useEffect, useRef, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import QuestionLayout from "../../components/QuestionLayout";
 import LeaderBoard from "../../components/LeaderBoard";
 import Popup from "../../components/Popup";
-import { useRouter } from "next/navigation";
 import { Pixelify_Sans } from "next/font/google";
 
 const pixelify = Pixelify_Sans({ subsets: ["latin"] });
@@ -26,6 +25,7 @@ function DashboardContent() {
   const [leaderboard, setLeaderboard] = useState<Leaderboard[] | null>(null);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupContent, setPopupContent] = useState<string>("");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -33,6 +33,11 @@ function DashboardContent() {
 
   const WS_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL || "ws://localhost:8080";
   const socketRef = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    const status = typeof window !== 'undefined' ? localStorage.getItem("status") : null;
+    setIsAuthenticated(status !== "unauthenticated");
+  }, []);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -52,7 +57,6 @@ function DashboardContent() {
       return;
     }
 
-   
     const socket = new WebSocket(WS_URL);
     socketRef.current = socket;
 
@@ -74,8 +78,10 @@ function DashboardContent() {
         }
 
         if (data.answerStatus === "correct") {
-          localStorage.setItem("hint1", "false");
-          localStorage.setItem("hint2", "false");
+          if (typeof window !== 'undefined') {
+            localStorage.setItem("hint1", "false");
+            localStorage.setItem("hint2", "false");
+          }
           setShowPopup(true);
           setPopupContent("Correct Answer");
         } else if (data.answerStatus === "incorrect") {
@@ -96,8 +102,11 @@ function DashboardContent() {
               points: data.points
             }));
           }
-          localStorage.setItem("hint1", data.hint1);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem("hint1", data.hint1);
+          }
         }
+        
         if (data.hint2) {
           setShowPopup(true);
           setPopupContent(data.hint2);
@@ -107,7 +116,9 @@ function DashboardContent() {
               points: data.points
             }));
           }
-          localStorage.setItem("hint2", data.hint2);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem("hint2", data.hint2);
+          }
         }
 
         setTimeout(() => {
@@ -131,76 +142,9 @@ function DashboardContent() {
         socketRef.current = null;
       }
     };
-  }, [email, WS_URL , router]);
+  }, [email, WS_URL]);
 
   function handleAnswerSubmit(answer: string, id: string) {
     if (socketRef.current) {
       socketRef.current.send(JSON.stringify({
-        command: "answer",
-        email: email,
-        answer: {
-          id: id,
-          answer: answer
-        }
-      }));
-    }
-  }
-
-  const getHint1 = () => {
-    if (socketRef.current) {
-      socketRef.current.send(JSON.stringify({
-        command: "hint1",
-        email: email,
-      }));
-    }
-  };
-
-  const getHint2 = () => {
-    if (socketRef.current) {
-      socketRef.current.send(JSON.stringify({
-        command: "hint2",
-        email: email,
-      }));
-    }
-  };
-
-  return (
-    <div className="flex h-[100vh] bg-neutral-800">
-      {questionDetails && (
-        <QuestionLayout
-          imageUrl={questionDetails.imageUrl}
-          questionId={questionDetails.questionId}
-          points={questionDetails.points}
-          onClick={(answer: string) =>
-            handleAnswerSubmit(answer, questionDetails.questionId.toString())
-          }
-          onHint1={getHint1}
-          onHint2={getHint2}
-        />
-      )}
-
-      {leaderboard && (
-        <LeaderBoard leaderboard={leaderboard} />
-      )}
-
-      {showPopup && (
-        <Popup content={popupContent} closePopup={() => setShowPopup(false)} />
-      )}
-    </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      {localStorage.getItem("status") === "unauthenticated" && (
-        <div style={{fontFamily: pixelify.style.fontFamily}} className="flex flex-col items-center justify-center min-h-screen bg-neutral-800 text-white text-5xl font-extralight">
-          <h1>Please sign in first</h1>
-          <button onClick={() => {window.location.href = "/signin"}} className="px-8 py-4 mt-5 text-2xl text-white bg-blue-600 rounded hover:bg-blue-700" >Sign In</button>
-
-          </div>
-      )}
-      <DashboardContent />
-    </Suspense>
-  );
-}
+        comman
