@@ -147,4 +147,102 @@ function DashboardContent() {
   function handleAnswerSubmit(answer: string, id: string) {
     if (socketRef.current) {
       socketRef.current.send(JSON.stringify({
-        comman
+        command: "answer",
+        email: email,
+        answer: {
+          id: id,
+          answer: answer
+        }
+      }));
+    }
+  }
+
+  const getHint1 = () => {
+    if (socketRef.current) {
+      socketRef.current.send(JSON.stringify({
+        command: "hint1",
+        email: email,
+      }));
+    }
+  };
+
+  const getHint2 = () => {
+    if (socketRef.current) {
+      socketRef.current.send(JSON.stringify({
+        command: "hint2",
+        email: email,
+      }));
+    }
+  };
+
+  return (
+    <div className="flex h-[100vh] bg-neutral-800">
+      {questionDetails && (
+        <QuestionLayout
+          imageUrl={questionDetails.imageUrl}
+          questionId={questionDetails.questionId}
+          points={questionDetails.points}
+          onClick={(answer: string) =>
+            handleAnswerSubmit(answer, questionDetails.questionId.toString())
+          }
+          onHint1={getHint1}
+          onHint2={getHint2}
+        />
+      )}
+
+      {leaderboard && (
+        <LeaderBoard leaderboard={leaderboard} />
+      )}
+
+      {showPopup && (
+        <Popup content={popupContent} closePopup={() => setShowPopup(false)} />
+      )}
+    </div>
+  );
+}
+
+function AuthCheck() {
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
+  
+  useEffect(() => {
+    setIsClient(true);
+    const status = localStorage.getItem("status");
+    if (status === "unauthenticated") {
+      router.push("/signin");
+    }
+  }, [router]);
+  
+  if (!isClient) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-neutral-800">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500" />
+      </div>
+    );
+  }
+  
+  if (isClient && localStorage.getItem("status") === "unauthenticated") {
+    return (
+      <div style={{fontFamily: pixelify.style.fontFamily}} className="flex flex-col items-center justify-center min-h-screen bg-neutral-800 text-white text-5xl font-extralight">
+        <h1>Please sign in first</h1>
+        <button onClick={() => {window.location.href = "/signin"}} className="px-8 py-4 mt-5 text-2xl text-white bg-blue-600 rounded hover:bg-blue-700">
+          Sign In
+        </button>
+      </div>
+    );
+  }
+  
+  return <DashboardContent />;
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen bg-neutral-800">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500" />
+      </div>
+    }>
+      <AuthCheck />
+    </Suspense>
+  );
+}
