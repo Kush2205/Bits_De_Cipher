@@ -4,7 +4,7 @@ const pixelify = Pixelify_Sans({ subsets: ["latin"] });
 function Rules() {
 
     return (
-        <div style={{ fontFamily: pixelify.style.fontFamily }} className=' bg-neutral-800 p-4 justify-center items-center w-full'>
+        <div style={{ fontFamily: pixelify.style.fontFamily }} className=' bg-neutral-800 p-4 h-fit  justify-center items-center w-full'>
             <h1 className='text-center text-7xl text-green-600 py-2 underline underline-offset-[10px] decoration-white'>  About Contest  </h1>
             <div className='flex flex-col  justify-center items-center ml-4 space-y-4 w-full mt-9 text-3xl'>
                 <div className='flex flex-col gap-y-3 w-[70%]'>
