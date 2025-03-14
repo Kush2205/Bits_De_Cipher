@@ -1,10 +1,14 @@
 "use client";
-import React, { useState, useEffect, useRef, Suspense } from "react";
+import React, { useState, useEffect, useRef, Suspense, use } from "react";
 import { useSearchParams } from "next/navigation";
 import QuestionLayout from "../../components/QuestionLayout";
 import LeaderBoard from "../../components/LeaderBoard";
 import Popup from "../../components/Popup";
-import { SessionProvider, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Pixelify_Sans } from "next/font/google";
+
+const pixelify = Pixelify_Sans({ subsets: ["latin"] });
+
 interface Leaderboard {
   rank: number;
   name: string;
@@ -23,7 +27,7 @@ function DashboardContent() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupContent, setPopupContent] = useState<string>("");
   
-  
+  const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
@@ -48,9 +52,7 @@ function DashboardContent() {
       return;
     }
 
-    if(localStorage.getItem("status") === "unauthenticated") {
-      window.location.href = "/signin";
-    }
+   
     const socket = new WebSocket(WS_URL);
     socketRef.current = socket;
 
@@ -129,7 +131,7 @@ function DashboardContent() {
         socketRef.current = null;
       }
     };
-  }, [email, WS_URL]);
+  }, [email, WS_URL , router]);
 
   function handleAnswerSubmit(answer: string, id: string) {
     if (socketRef.current) {
@@ -191,6 +193,13 @@ function DashboardContent() {
 export default function Page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      {localStorage.getItem("status") === "unauthenticated" && (
+        <div style={{fontFamily: pixelify.style.fontFamily}} className="flex flex-col items-center justify-center min-h-screen bg-neutral-800 text-white text-5xl font-extralight">
+          <h1>Please sign in first</h1>
+          <button onClick={() => {window.location.href = "/signin"}} className="px-8 py-4 mt-5 text-2xl text-white bg-blue-600 rounded hover:bg-blue-700" >Sign In</button>
+
+          </div>
+      )}
       <DashboardContent />
     </Suspense>
   );
