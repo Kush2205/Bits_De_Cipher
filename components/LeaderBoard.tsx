@@ -1,4 +1,4 @@
-//// filepath: /d:/Projects/TypeScript Projects/Bits_De_Cipher/components/LeaderBoard.tsx
+
 import React from 'react';
 import { Pixelify_Sans } from 'next/font/google';
 
@@ -11,7 +11,7 @@ interface LeaderBoardEntry {
 }
 
 interface LeaderBoardProps {
-  // The parent component passes "leaderboard" instead of "entries"
+  
   leaderboard: LeaderBoardEntry[];
 }
 
