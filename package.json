@@ -2,7 +2,7 @@
   "name": "spoof",
   "version": "0.1.0",
   "engines": {
-    "node": ">=18.17.0"
+    "node": "18.x"
   },
   "private": true,
   "scripts": {
