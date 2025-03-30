@@ -1,11 +1,13 @@
 "use client";
+
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import QuestionLayout from "../../components/QuestionLayout";
 import LeaderBoard from "../../components/LeaderBoard";
 import Popup from "../../components/Popup";
 import { Pixelify_Sans } from "next/font/google";
-
+import image from "../../images/404.png"
 const pixelify = Pixelify_Sans({ subsets: ["latin"] });
 
 interface Leaderboard {
@@ -26,7 +28,8 @@ function DashboardContent() {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupContent, setPopupContent] = useState<string>("");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  
+  const [question, setQuestion] = useState<any>(null);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
@@ -91,6 +94,7 @@ function DashboardContent() {
 
         if (data.question) {
           setQuestionDetails(data.question);
+          setQuestion(data.question);
         }
 
         if (data.hint1) {
@@ -124,6 +128,7 @@ function DashboardContent() {
         setTimeout(() => {
           if (data.updatedQuestion) {
             setQuestionDetails(data.updatedQuestion);
+            setQuestion(data.updatedQuestion);
           }
         }, 1500);
 
@@ -175,6 +180,33 @@ function DashboardContent() {
     }
   };
 
+  
+  if (question && question.questionId === 12) {
+    return (
+      <div className="relative w-screen h-screen flex items-center justify-center bg-[#00bf63]">
+        <div className="relative w-[85%] h-[85%]">
+          <Image
+            src={image}
+            alt="Error 404"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
+        
+        {/* Keep WebSocket connection alive */}
+        <div className="hidden">
+          {leaderboard && <LeaderBoard leaderboard={leaderboard} />}
+        </div>
+        
+        {/* Show popups if needed */}
+        {showPopup && (
+          <Popup content={popupContent} closePopup={() => setShowPopup(false)} />
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-[100vh] bg-neutral-800">
       {questionDetails && (
@@ -189,10 +221,12 @@ function DashboardContent() {
           onHint2={getHint2}
         />
       )}
-
+      <div id="leaderboard" className="overflow-y-scroll overflow-x-hidden border-none  bg-neutral-800 ">
       {leaderboard && (
         <LeaderBoard leaderboard={leaderboard} />
       )}
+      </div>
+    
 
       {showPopup && (
         <Popup content={popupContent} closePopup={() => setShowPopup(false)} />

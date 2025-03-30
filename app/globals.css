@@ -5,7 +5,14 @@
     display: none;
   }
   
- 
+ #leaderboard {
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+    overflow-y: scroll; 
+  }
+  #leaderboard::-webkit-scrollbar {
+    display: none;
+  }
   :root {
     scrollbar-width: none; 
     -ms-overflow-style: none; 
