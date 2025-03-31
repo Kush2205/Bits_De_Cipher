@@ -81,6 +81,7 @@ const QuestionLayout: React.FC<QuestionProps> = ({
         onSubmit={(e) => {
           e.preventDefault();
           onClick(answer, questionId);
+          setAnswer('');
         }}
       >
         <input
@@ -88,7 +89,7 @@ const QuestionLayout: React.FC<QuestionProps> = ({
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           placeholder="Enter your answer"
-          className="p-2 w-[1000px]  border border-gray-300 rounded"
+          className="p-2 w-[1000px] text-black border border-gray-300 rounded"
         />
         
           <div className='flex justify-center items-center'>
