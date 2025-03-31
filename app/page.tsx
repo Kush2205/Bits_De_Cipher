@@ -23,7 +23,7 @@ function PageContent() {
   } | null>(null);
   const [eventStarted, setEventStarted] = useState(false);
   
-  const EVENT_DATE = new Date("March 29, 2025 16:00:00").getTime();
+  const EVENT_DATE = new Date("April 5,2025 16:00:00").getTime();
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
@@ -55,9 +55,12 @@ function PageContent() {
     }, 1000);
     
     return () => clearInterval(timer);
+    
   }, [EVENT_DATE]);
 
+
   useEffect(() => {
+   
     if (!eventStarted) {
       return;
     }
@@ -111,7 +114,7 @@ function PageContent() {
             <div className="text-xl mt-2">Seconds</div>
           </div>
         </div>
-        <p className="mt-12 text-2xl">Come back on March 29, 2025 at 4:00 PM to participate!</p>
+        <p className="mt-12 text-2xl">Come back on April 5, 2025 at 4:00 PM to participate!</p>
       </div>
     );
   }
