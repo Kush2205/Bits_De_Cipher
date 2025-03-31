@@ -32,7 +32,7 @@ export default function Signin() {
 
   return (
     <div className="flex">
-      <div className="w-[50%] h-screen bg-neutral-800 flex items-center justify-center">
+      <div className="w-[55%] h-screen bg-neutral-800 flex items-center justify-center">
         <div className="w-[450px] h-[470px] bg-neutral-700 rounded-xl">
           <div>
             <h1
@@ -111,10 +111,8 @@ export default function Signin() {
       </div>
       <div  style={{
         backgroundImage: `url(${Image.src})`,
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover", 
-      }} className="w-[50%] h-screen">
+        
+      }} className="w-[100vh] h-screen bg-cover bg-center ">
 
 
       </div>

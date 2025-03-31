@@ -31,7 +31,7 @@ const QuestionLayout: React.FC<QuestionProps> = ({
   }
 
   return (
-    <div className="p-5 w-[70vw] bg-neutral-800 h-[90%]">
+    <div className="p-5 w-[70vw] bg-neutral-800 min-h-fit">
       <div className="w-full flex justify-around">
         <h2
           style={{
@@ -76,8 +76,8 @@ const QuestionLayout: React.FC<QuestionProps> = ({
           Hint 2
         </button>
       </div>
-
-      <form
+    <div>
+    <form
         onSubmit={(e) => {
           e.preventDefault();
           onClick(answer, questionId);
@@ -88,20 +88,24 @@ const QuestionLayout: React.FC<QuestionProps> = ({
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           placeholder="Enter your answer"
-          className="p-2 w-[1000px] mb-3 border border-gray-300 rounded"
+          className="p-2 w-[1000px]  border border-gray-300 rounded"
         />
-        <div className="w-full flex justify-center">
+        
+          <div className='flex justify-center items-center'>
           <button
             type="submit"
-            className="w-[200px] h-[50px] bg-green-600 text-white rounded hover:bg-green-700 transition-all flex items-center justify-center text-3xl mt-3"
+           className='bg-green-500 mt-5 w-[100px] h-[40px] rounded-xl flex justify-center items-center text-white text-xl hover:bg-green-700 transition-all'
             style={{
               fontFamily: pixelifySans.style.fontFamily,
             }}
           >
             Submit
           </button>
-        </div>
+          </div>
+       
       </form>
+    </div>
+      
     </div>
   );
 };
