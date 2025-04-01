@@ -34,7 +34,7 @@ function PageContent() {
   
   ];
 
-  // Background gradient cycling
+ 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBgIndex(prev => (prev + 1) % gradients.length);
@@ -42,11 +42,15 @@ function PageContent() {
     return () => clearInterval(interval);
   }, []);
 
-  // Check registration status from localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const registered = localStorage.getItem('registered');
-      setIsRegistered(registered === 'true');
+      if(registered === 'true') {
+        setIsRegistered(true);
+      }
+      else{
+        setIsRegistered(false);
+      }
     }
   }, []);
 
@@ -211,11 +215,7 @@ function PageContent() {
                 <button
                   className="px-8 py-4 text-xl md:text-2xl text-white bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl"
                   style={{ fontFamily: pixelify.style.fontFamily }}
-                  onClick={() => {
-                    if (typeof window !== 'undefined') {
-                      localStorage.setItem('registered', 'true');
-                    }
-                  }}
+                 
                 >
                   Register Now
                 </button>
