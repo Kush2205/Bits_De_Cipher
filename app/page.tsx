@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Pixelify_Sans } from "next/font/google";
 import { Poppins } from "next/font/google";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 import Rules from "../components/Rules";
 const pixelify = Pixelify_Sans({ subsets: ["latin"] });
@@ -22,9 +24,33 @@ function PageContent() {
     seconds: number;
   } | null>(null);
   const [eventStarted, setEventStarted] = useState(false);
+  const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
+  const [currentBgIndex, setCurrentBgIndex] = useState(0);
   
-  const EVENT_DATE = new Date("April 5,2025 16:00:00").getTime();
+  const EVENT_DATE = new Date("April 5, 2025 16:00:00").getTime();
+  
+  const gradients = [
+    "linear-gradient(to right bottom, #0f172a, #134e4a)",
+  
+  ];
 
+  // Background gradient cycling
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBgIndex(prev => (prev + 1) % gradients.length);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Check registration status from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const registered = localStorage.getItem('registered');
+      setIsRegistered(registered === 'true');
+    }
+  }, []);
+
+  // Timer logic
   useEffect(() => {
     const calculateTimeRemaining = () => {
       const now = new Date().getTime();
@@ -58,9 +84,8 @@ function PageContent() {
     
   }, [EVENT_DATE]);
 
-
+  // Handle authentication and user existence
   useEffect(() => {
-   
     if (!eventStarted) {
       return;
     }
@@ -70,7 +95,6 @@ function PageContent() {
       return;
     }
     if (status === "authenticated" && session?.user) {
-      
       (async () => {
         try {
           const res = await axios.post("api/db/users", {
@@ -92,29 +116,127 @@ function PageContent() {
     }
   }, [status, session, router, eventStarted]);
 
+  // Render countdown timer with register button if not registered
   if (!eventStarted && timeRemaining) {
     return (
-      <div style={{ fontFamily: pixelify.style.fontFamily }} className="flex flex-col items-center justify-center min-h-screen bg-neutral-800 text-white">
-        <h1 className="text-5xl mb-8">Event starts in:</h1>
-        <div className="flex gap-6 text-center">
-          <div className="bg-neutral-700 p-6 rounded-lg min-w-[120px]">
-            <div className="text-6xl">{timeRemaining.days}</div>
-            <div className="text-xl mt-2">Days</div>
-          </div>
-          <div className="bg-neutral-700 p-6 rounded-lg min-w-[120px]">
-            <div className="text-6xl">{timeRemaining.hours}</div>
-            <div className="text-xl mt-2">Hours</div>
-          </div>
-          <div className="bg-neutral-700 p-6 rounded-lg min-w-[120px]">
-            <div className="text-6xl">{timeRemaining.minutes}</div>
-            <div className="text-xl mt-2">Minutes</div>
-          </div>
-          <div className="bg-neutral-700 p-6 rounded-lg min-w-[120px]">
-            <div className="text-6xl">{timeRemaining.seconds}</div>
-            <div className="text-xl mt-2">Seconds</div>
-          </div>
+      <div 
+        className="flex flex-col items-center justify-center min-h-screen relative overflow-hidden text-white"
+        style={{ 
+          background: gradients[currentBgIndex],
+          transition: "background 2s ease-in-out"
+        }}
+      >
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute w-[500px] h-[500px] left-[-200px] top-[-200px] rounded-full bg-green-500/20 blur-[100px]"></div>
+          <div className="absolute w-[500px] h-[500px] right-[-200px] bottom-[-200px] rounded-full bg-blue-500/20 blur-[100px]"></div>
+          <div className="absolute w-[300px] h-[300px] left-[60%] top-[20%] rounded-full bg-purple-500/20 blur-[100px]"></div>
         </div>
-        <p className="mt-12 text-2xl">Come back on April 5, 2025 at 4:00 PM to participate!</p>
+        
+        {/* Content */}
+        <div className="z-10 flex flex-col items-center max-w-5xl px-4">
+          <motion.h1 
+            className="text-4xl md:text-6xl mb-8 text-center"
+            style={{ fontFamily: pixelify.style.fontFamily }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Bits De Cipher
+          </motion.h1>
+          
+          <motion.p
+            className="text-xl md:text-2xl mb-12 text-center text-green-300"
+            style={{ fontFamily: pixelify.style.fontFamily }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Event starts in:
+          </motion.p>
+          
+          <motion.div 
+            className="flex flex-wrap justify-center gap-4 md:gap-6 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <div className="w-[140px] h-[140px] bg-black/30 backdrop-blur-lg rounded-xl flex flex-col items-center justify-center border border-white/10 shadow-lg">
+              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-300 to-blue-400 bg-clip-text text-transparent" style={{ fontFamily: pixelify.style.fontFamily }}>
+                {timeRemaining.days}
+              </div>
+              <div className="text-lg mt-2 text-white/70">Days</div>
+            </div>
+            
+            <div className="w-[140px] h-[140px] bg-black/30 backdrop-blur-lg rounded-xl flex flex-col items-center justify-center border border-white/10 shadow-lg">
+              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-300 to-blue-400 bg-clip-text text-transparent" style={{ fontFamily: pixelify.style.fontFamily }}>
+                {timeRemaining.hours}
+              </div>
+              <div className="text-lg mt-2 text-white/70">Hours</div>
+            </div>
+            
+            <div className="w-[140px] h-[140px] bg-black/30 backdrop-blur-lg rounded-xl flex flex-col items-center justify-center border border-white/10 shadow-lg">
+              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-300 to-blue-400 bg-clip-text text-transparent" style={{ fontFamily: pixelify.style.fontFamily }}>
+                {timeRemaining.minutes}
+              </div>
+              <div className="text-lg mt-2 text-white/70">Minutes</div>
+            </div>
+            
+            <div className="w-[140px] h-[140px] bg-black/30 backdrop-blur-lg rounded-xl flex flex-col items-center justify-center border border-white/10 shadow-lg">
+              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-300 to-blue-400 bg-clip-text text-transparent" style={{ fontFamily: pixelify.style.fontFamily }}>
+                {timeRemaining.seconds}
+              </div>
+              <div className="text-lg mt-2 text-white/70">Seconds</div>
+            </div>
+          </motion.div>
+          
+          <motion.p 
+            className="text-xl md:text-2xl text-center mb-12 max-w-2xl"
+            style={{ fontFamily: PoppinsFont.style.fontFamily }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
+            Come back on April 5, 2025 at 4:00 PM to participate in the ultimate coding challenge!
+          </motion.p>
+          
+          {/* Show Register button if not registered */}
+          {isRegistered === false && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+            >
+              <Link href="/register">
+                <button
+                  className="px-8 py-4 text-xl md:text-2xl text-white bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl"
+                  style={{ fontFamily: pixelify.style.fontFamily }}
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      localStorage.setItem('registered', 'true');
+                    }
+                  }}
+                >
+                  Register Now
+                </button>
+              </Link>
+            </motion.div>
+          )}
+          
+          {/* Show information text if already registered */}
+          {isRegistered === true && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="bg-white/10 backdrop-blur-md rounded-lg p-6 max-w-2xl border border-white/20"
+            >
+              <p className="text-xl text-center" style={{ fontFamily: PoppinsFont.style.fontFamily }}>
+                You're all set! You've already registered for the event. We'll notify you when the challenge begins.
+              </p>
+            </motion.div>
+          )}
+        </div>
       </div>
     );
   }
