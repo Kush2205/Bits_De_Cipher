@@ -258,21 +258,7 @@ export default function RegisterPage() {
                 )}
               </motion.button>
               
-              <div className="mt-6 flex items-center justify-center space-x-4">
-                <div className="h-px bg-neutral-700 flex-grow"></div>
-                <p className="text-neutral-400 text-sm">Already registered?</p>
-                <div className="h-px bg-neutral-700 flex-grow"></div>
-              </div>
-              
-              <div className="mt-4 text-center">
-                <a 
-                  href="/signin" 
-                  className="text-green-400 hover:text-green-300 font-medium transition-colors duration-200"
-                  style={{ fontFamily: pixelify.style.fontFamily }}
-                >
-                  Sign in to your account
-                </a>
-              </div>
+            
             </motion.form>
           )}
         </div>
