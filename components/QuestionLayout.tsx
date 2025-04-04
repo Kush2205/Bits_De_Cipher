@@ -55,11 +55,11 @@ const QuestionLayout: React.FC<QuestionProps> = ({
         <img
           src={imageUrl}
           alt={`Question ${questionId}`}
-          className="w-[1000px] h-[500px] mb-4 object-contain"
+          className={`w-[1000px] h-[500px] mb-4 object-contain ${questionId === 12 ? 'flex justify-center items-center h-[80vh]' : ''}`}
         />
       </div>
 
-      <div
+      {(questionId !== 12 &&<div
         style={{ fontFamily: pixelifySans.style.fontFamily }}
         className="flex gap-5 my-5 w-full justify-center gap-x-10"
       >
@@ -75,9 +75,9 @@ const QuestionLayout: React.FC<QuestionProps> = ({
         >
           Hint 2
         </button>
-      </div>
+      </div>)}
     <div>
-    <form
+    {(questionId !== 12 && <form
         onSubmit={(e) => {
           e.preventDefault();
           onClick(answer, questionId);
@@ -92,19 +92,21 @@ const QuestionLayout: React.FC<QuestionProps> = ({
           className="p-2 w-[1000px] text-black border border-gray-300 rounded"
         />
         
-          <div className='flex justify-center items-center'>
-          <button
-            type="submit"
-           className='bg-green-500 mt-5 w-[100px] h-[40px] rounded-xl flex justify-center items-center text-white text-xl hover:bg-green-700 transition-all'
-            style={{
-              fontFamily: pixelifySans.style.fontFamily,
-            }}
-          >
-            Submit
-          </button>
-          </div>
+          
+            <div className='flex justify-center items-center'>
+              <button
+              type="submit"
+              className='bg-green-500 mt-5 w-[100px] h-[40px] rounded-xl flex justify-center items-center text-white text-xl hover:bg-green-700 transition-all'
+              style={{
+                fontFamily: pixelifySans.style.fontFamily,
+              }}
+              >
+              Submit
+              </button>
+            </div>
+            
        
-      </form>
+      </form>)}
     </div>
       
     </div>
