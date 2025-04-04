@@ -35,7 +35,7 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
-  const WS_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL || "ws://localhost:8080";
+  const WS_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL || "ws://localhost:808";
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
