@@ -55,11 +55,11 @@ const QuestionLayout: React.FC<QuestionProps> = ({
         <img
           src={imageUrl}
           alt={`Question ${questionId}`}
-          className={`w-[1000px] h-[500px] mb-4 object-contain ${questionId === 12 ? 'flex justify-center items-center h-[80vh]' : ''}`}
+          className={`w-[1000px] h-[500px] mb-4 object-contain ${questionId === 13 ? 'flex justify-center items-center h-[80vh]' : ''}`}
         />
       </div>
 
-      {(questionId !== 12 &&<div
+      {(questionId !== 13 &&<div
         style={{ fontFamily: pixelifySans.style.fontFamily }}
         className="flex gap-5 my-5 w-full justify-center gap-x-10"
       >
@@ -77,7 +77,7 @@ const QuestionLayout: React.FC<QuestionProps> = ({
         </button>
       </div>)}
     <div>
-    {(questionId !== 12 && <form
+    {(questionId !== 13 && <form
         onSubmit={(e) => {
           e.preventDefault();
           onClick(answer, questionId);
