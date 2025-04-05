@@ -99,7 +99,7 @@ const [userPoints, setUserPoints] = useState<number | null>(null);
         if (data.question) {
           setQuestionDetails(data.question);
           setQuestion(data.question);
-          setLoading(false); // Stop loading when question data is received
+          setLoading(false); 
         }
         
         if (data.hint1) {

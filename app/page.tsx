@@ -24,11 +24,11 @@ function PageContent() {
     minutes: number;
     seconds: number;
   } | null>(null);
-  const [eventStarted, setEventStarted] =  useState(false);
+  const [eventStarted, setEventStarted] =  useState(true);
   const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
   
-  const EVENT_DATE = new Date("April 5, 2025 16:00:00").getTime();
+  const EVENT_DATE = new Date("April 5, 2025 13:38:00").getTime();
   const gradients = ["linear-gradient(to right bottom, #0f172a, #134e4a)"];
 
   useEffect(() => {
@@ -82,7 +82,7 @@ function PageContent() {
          const email = session.user.email;
          const year = email.split("24")[0];
         
-        if (year !== "24" && email!="geeksforgeeks@rgipt.ac.in" && email!= "23cs3037@rgipt.ac.in") {
+        if (year !== "24" && email!="geeksforgeeks@rgipt.ac.in" && email!= "23cs3037@rgipt.ac.in" && email!="kr.kushagra2205@gmail.com") {
            setIsFirstYear(false);
           return;
        } else  {
