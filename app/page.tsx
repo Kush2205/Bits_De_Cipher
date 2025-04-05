@@ -220,25 +220,25 @@ function PageContent() {
   
   const handleRejoin = () => router.push("/dashboard?email=" + session?.user?.email);
   
-  if (userExists) {
+   if (userExists) {
     return (
-      <div style={{ fontFamily: pixelify.style.fontFamily }} className="flex flex-col items-center justify-center min-h-screen bg-neutral-800 text-white text-5xl font-extralight">
+     <div style={{ fontFamily: pixelify.style.fontFamily }} className="flex flex-col items-center justify-center min-h-screen bg-neutral-800 text-white text-5xl font-extralight">
         <h1 className="mb-4 text-center">Had your break, {session?.user?.name}, Time to kill it.</h1>
-        <button onClick={handleRejoin} style={{ fontFamily: PoppinsFont.style.fontFamily }} className="px-8 py-4 mt-5 text-2xl text-white bg-green-600 rounded hover:bg-green-700">
+        <button onClick={handleRejoin} style={{ fontFamily: PoppinsFont.style.fontFamily }} className="px-8 py-4 mt-5 text-2xl text-white bg-blue-600 rounded hover:bg-blue-700">
           Rejoin
-        </button>
+      </button>
       </div>
-    );
+   );
   }
   
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-neutral">
-      <Rules />
-      <div className="w-full bg-neutral-800 flex flex-col items-center justify-center p-5">
-        <button className="px-8 py-4 mt-5 text-2xl text-white bg-blue-600 rounded hover:bg-blue-700" onClick={handleRejoin}>
-          Start
+      <Rules>
+        <button className="px-8 py-4 mt-5 text-2xl text-white  bg-blue-600 rounded hover:bg-blue-700" onClick={handleRejoin}>
+          Rejoin
         </button>
-      </div>
+      </Rules>
+     
     </div>
   );
 }

@@ -8,14 +8,15 @@ interface LeaderBoardEntry {
   rank: number;
   name: string;
   points: number;
+  userPoints?: number;
 }
 
 interface LeaderBoardProps {
-  
   leaderboard: LeaderBoardEntry[];
+  userPoints?: number;
 }
 
-function LeaderBoard({ leaderboard }: LeaderBoardProps) {
+function LeaderBoard({ leaderboard, userPoints }: LeaderBoardProps) {
   const displayPosition = (rank: number, name: string, points: number, index: number) => {
     const firstname = name.split(' ')[0];
     const formattedName = firstname.charAt(0).toUpperCase() + firstname.slice(1).toLowerCase();
@@ -42,7 +43,8 @@ function LeaderBoard({ leaderboard }: LeaderBoardProps) {
       className="w-[30vw] h-[150vh] bg-neutral-800 border-gray-300  border-l-2 border-b-0 shadow-lg"
     >
       <div className="mt-3">
-        <h1 className="text-green-400 text-5xl underline text-center">GeeksBoard</h1>
+      <h1 className="text-white text-2xl border-b-2 border-b-white text-center pb-2">Your Points : {userPoints}</h1>
+        <h1 className="text-green-400 text-5xl underline text-center mt-6">GeeksBoard</h1>
       </div>
       <div className="overflow-y-auto ">
         {leaderboard.map((entry, index) =>

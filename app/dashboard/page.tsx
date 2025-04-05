@@ -28,8 +28,10 @@ function DashboardContent() {
   const [leaderboard, setLeaderboard] = useState<Leaderboard[] | null>(null);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupContent, setPopupContent] = useState<string>("");
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+const [userPoints, setUserPoints] = useState<number | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [question, setQuestion] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -59,21 +61,29 @@ function DashboardContent() {
       console.error("No email provided in query parameters.");
       return;
     }
+    
+    setLoading(true);
+    
     const socket = new WebSocket(WS_URL);
     socketRef.current = socket;
+    
     socket.onopen = () => {
       socket.send(JSON.stringify({ command: "connect", email }));
     };
+    
     socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        
         if (data.message) {
           setPopupContent(data.message);
           setShowPopup(true);
         }
+        
         if (data.leaderboard) {
           setLeaderboard(data.leaderboard);
         }
+        
         if (data.answerStatus === "correct") {
           if (typeof window !== "undefined") {
             localStorage.setItem("hint1", "false");
@@ -85,10 +95,13 @@ function DashboardContent() {
           setPopupContent("Wrong Answer");
           setShowPopup(true);
         }
+        
         if (data.question) {
           setQuestionDetails(data.question);
           setQuestion(data.question);
+          setLoading(false); // Stop loading when question data is received
         }
+        
         if (data.hint1) {
           setShowPopup(true);
           setPopupContent(data.hint1);
@@ -101,6 +114,7 @@ function DashboardContent() {
             localStorage.setItem("hint1", data.hint1);
           }
         }
+        
         if (data.hint2) {
           setShowPopup(true);
           setPopupContent(data.hint2);
@@ -113,6 +127,12 @@ function DashboardContent() {
             localStorage.setItem("hint2", data.hint2);
           }
         }
+
+        if(data.totalPoints) {
+         
+          setUserPoints(data.totalPoints);
+        }
+        
         setTimeout(() => {
           if (data.updatedQuestion) {
             setQuestionDetails(data.updatedQuestion);
@@ -123,10 +143,20 @@ function DashboardContent() {
         console.error("Error parsing message:", error, event.data);
       }
     };
+    
     socket.onclose = (event) => {
       console.log("WebSocket closed. Code:", event.code, "Reason:", event.reason);
     };
+    
+    
+    
+    // Set a timeout to stop the loading state if it takes too long
+    const timeout = setTimeout(() => {
+      if (loading) setLoading(false);
+    }, 10000); // 10 second timeout
+    
     return () => {
+      clearTimeout(timeout);
       if (socketRef.current) {
         socketRef.current.close();
         socketRef.current = null;
@@ -156,29 +186,50 @@ function DashboardContent() {
     return (
       <div className="flex justify-center w-full h-[100vh] bg-neutral-800">
         <div id="leaderboard" className="overflow-y-scroll overflow-x-hidden flex justify-center border-none bg-neutral-800 w-full">
-          {leaderboard && <LeaderBoard leaderboard={leaderboard} />}
+          {loading ? (
+            <div className="flex items-center justify-center w-full">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-500" />
+            </div>
+          ) : (
+            leaderboard && <LeaderBoard leaderboard={leaderboard} userPoints={userPoints}/>
+          )}
         </div>
         {showPopup && <Popup content={popupContent} closePopup={() => setShowPopup(false)} />}
       </div>
     );
   }
 
- 
-
   return (
     <div className="flex h-[100vh] bg-neutral-800">
-      {questionDetails && (
-        <QuestionLayout
-          imageUrl={questionDetails.imageUrl}
-          questionId={questionDetails.questionId}
-          points={questionDetails.points}
-          onClick={(answer: string) => handleAnswerSubmit(answer, questionDetails.questionId.toString())}
-          onHint1={getHint1}
-          onHint2={getHint2}
-        />
+      {loading ? (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex flex-col items-center">
+            <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-4 border-green-500 mb-4" />
+            <p className="text-white text-xl" style={{ fontFamily: pixelify.style.fontFamily }}>
+              Loading question...
+            </p>
+          </div>
+        </div>
+      ) : (
+        questionDetails && (
+          <QuestionLayout
+            imageUrl={questionDetails.imageUrl}
+            questionId={questionDetails.questionId}
+            points={questionDetails.points}
+            onClick={(answer: string) => handleAnswerSubmit(answer, questionDetails.questionId.toString())}
+            onHint1={getHint1}
+            onHint2={getHint2}
+          />
+        )
       )}
       <div id="leaderboard" className="overflow-y-scroll overflow-x-hidden border-none bg-neutral-800">
-        {leaderboard && <LeaderBoard leaderboard={leaderboard} />}
+        {loading ? (
+          <div className="flex items-center justify-center h-20 mt-5">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500" />
+          </div>
+        ) : (
+          leaderboard && <LeaderBoard leaderboard={leaderboard} userPoints={userPoints}/>
+        )}
       </div>
       {showPopup && <Popup content={popupContent} closePopup={() => setShowPopup(false)} />}
     </div>
