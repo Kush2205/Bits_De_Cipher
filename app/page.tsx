@@ -24,7 +24,7 @@ function PageContent() {
     minutes: number;
     seconds: number;
   } | null>(null);
-  const [eventStarted, setEventStarted] =  useState(true);
+  const [eventStarted, setEventStarted] =  useState(false);
   const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
   
